@@ -1,5 +1,9 @@
 import sys
+import os
+from dotenv import load_dotenv
 from crewai import Crew, Process
+
+load_dotenv()
 from tasks import research_task, summarize_task, fact_check_task
 from agents import researcher, summarizer, fact_checker
 
@@ -17,8 +21,9 @@ def main():
         agents=[researcher, summarizer, fact_checker],
         tasks=[research_task, summarize_task, fact_check_task],
         process=Process.sequential, 
-        memory=True, # Uses vector db explicitly
-        verbose=True
+        memory=False, # Disabled memory to avoid OpenAI/ChromaDB API key requirements
+        verbose=True,
+        max_rpm=5
     )
 
     print(f"\nStarting the research process for: '{topic}'...\n")

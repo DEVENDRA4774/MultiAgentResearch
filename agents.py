@@ -1,16 +1,14 @@
 import os
-from crewai import Agent
+from crewai import Agent, LLM
 from tools import search_tool
 from dotenv import load_dotenv
 
 load_dotenv()
 
-from langchain_google_genai import ChatGoogleGenerativeAI
-
-# Initialize Gemini LLM
-llm = ChatGoogleGenerativeAI(
-    model="gemini-1.5-pro",
-    temperature=0.7
+# We use the native crewai LLM class with standard gemini-pro which exists on all API keys
+gemini_llm = LLM(
+    model="gemini/gemini-2.5-flash-lite",
+    api_key=os.getenv("GEMINI_API_KEY")
 )
 
 # 1. Senior Researcher
@@ -21,7 +19,9 @@ researcher = Agent(
     verbose=True,
     allow_delegation=False,
     tools=[search_tool],
-    llm=llm
+    llm=gemini_llm,
+    max_rpm=5,
+    max_iter=2
 )
 
 # 2. Tech Summarizer
@@ -31,7 +31,9 @@ summarizer = Agent(
     backstory='You are a renowned technical writer known for your ability to explain complex concepts in simple terms. You take the dense reports from researchers and turn them into clear, engaging summaries for executives.',
     verbose=True,
     allow_delegation=False,
-    llm=llm
+    llm=gemini_llm,
+    max_rpm=5,
+    max_iter=2
 )
 
 # 3. Fact-Checker
@@ -42,5 +44,7 @@ fact_checker = Agent(
     verbose=True,
     allow_delegation=False,
     tools=[search_tool],
-    llm=llm
+    llm=gemini_llm,
+    max_rpm=5,
+    max_iter=2
 )
