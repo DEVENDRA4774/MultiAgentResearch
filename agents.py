@@ -7,7 +7,7 @@ load_dotenv()
 
 # We use the native crewai LLM class with standard gemini-pro which exists on all API keys
 gemini_llm = LLM(
-    model="gemini/gemini-2.5-flash-lite",
+    model="gemini/gemini-1.5-flash",
     api_key=os.getenv("GEMINI_API_KEY")
 )
 
@@ -21,7 +21,7 @@ researcher = Agent(
     tools=[search_tool],
     llm=gemini_llm,
     max_rpm=5,
-    max_iter=2
+    max_iter=1
 )
 
 # 2. Tech Summarizer
@@ -33,7 +33,7 @@ summarizer = Agent(
     allow_delegation=False,
     llm=gemini_llm,
     max_rpm=5,
-    max_iter=2
+    max_iter=1
 )
 
 # 3. Fact-Checker
@@ -46,5 +46,5 @@ fact_checker = Agent(
     tools=[search_tool],
     llm=gemini_llm,
     max_rpm=5,
-    max_iter=2
+    max_iter=1
 )
